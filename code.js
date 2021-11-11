@@ -3,23 +3,21 @@ const descripcion = document.getElementById("descripcion")
 const fecha = document.getElementById("fecha")
 const tareas = document.getElementById("tareas")
 const verTodo = document.getElementById("verTodo")
-
-verTodo.addEventListener("change", saveDone);
+verTodo.addEventListener("change", displayTasks);
 
 let tareas_list = []
 var formulario = document.getElementById("form-tareas");
 formulario.addEventListener("submit", setTask);
-var cont = 0;
+var cont;
 
 readTasks(); 
 
 function setTask(e){
+    if(cont == null){
+        cont = 0;
+    }
     e.preventDefault();
     e.stopPropagation();
-
-    console.log(titulo.value);
-    console.log(descripcion.value);
-    console.log(fecha.value);
 
     if(titulo.value != "")
     {
@@ -46,9 +44,6 @@ function readTasks(){
     else{
         tareas_list = [];
     }
-
-    displayTasks();
-
     var json = localStorage.tasksCont;
     if(json != undefined){
         cont = JSON.parse(json);
@@ -56,6 +51,7 @@ function readTasks(){
     else{
         cont = 0;
     }
+    displayTasks();
 }
 
 function deleteTask(id){
@@ -72,15 +68,23 @@ function saveTasks(){
 }
 
 function displayTasks(){
+    
+    console.log("cont", cont)
     var html = "";
     for(var i = 0; i < tareas_list.length; i++)
     {
         if(verTodo.checked == true || tareas_list[i].done == false){
+            
             html+=
-            `
-            <div>
+            `<div`;
+            if(tareas_list[i].done == true)
+            {
+                html+= ` style="background-color: green;"`;
+            }
+            html+=`>
+                <hr>
                 <div>
-                <h3>${tareas_list[i].title}</h3> ${tareas_list[i].date}
+                <h2>${tareas_list[i].title}</h2> ${tareas_list[i].date}
                 </div>
                 <div>
                 <text>${tareas_list[i].desc}</text>
@@ -90,34 +94,39 @@ function displayTasks(){
             if(tareas_list[i].done == false)
             {
             html += `
-            <label><input type="checkbox" value="Completada">Completada</label>
-            </div>
-            </div>`;
+            <label><input id="Check_${tareas_list[i].id}" type="checkbox" value="Completada">Completada</label>`;
             }
             else
             {
                 html += `
-                <label><input id=${tareas_list[i].id} type="checkbox" value="Completada" checked>Completada</label>`;
+                <label><input id="Check_${tareas_list[i].id}" type="checkbox" value="Completada" checked>Completada</label>`;
             }
             html += `
             </div>
             </div>`;
         }
+        tareas.innerHTML = html;
+        console.log(html);
+        console.log("id","Check_" + tareas_list[i].id)
+        var taskDone = document.getElementById("Check_" + tareas_list[i].id)
+        if(taskDone != null){
+            taskDone.addEventListener("change", saveDone);
+        }
     }
-    tareas.innerHTML = html;
+    
 }
 
 function saveDone(e)
 {
     e.preventDefault();
-    console.log("si entre pendejo");
     for(var i = 0; i < tareas_list.length; i++){
-        if(tareas_list[i].id == this.id)
+        console.log(this.id)
+        if("Check_" + tareas_list[i].id == this.id)
         {
-            tareas_list[i].done = true;
+            console.log("encontre uno");
+            tareas_list[i].done = this.checked;
             break;
         }
-        
     }
-    displayTasks();
+    saveTasks();
 }
