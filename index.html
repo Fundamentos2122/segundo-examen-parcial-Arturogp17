@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600|Open+Sans" rel="stylesheet"> 
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+	<link rel="stylesheet" href="estilos.css">
+	<header>
+        <h1>Lista de Tareas</h1>
+    </header>
+</head>
+<body>
+	
+	<div class="contenedor">
+			<label><input type="checkbox" id="verTodo">Ver todas</label>
+			<button id="btn-abrir-popup" class="btn-abrir-popup">Nueva</button>
+
+		<div class="overlay" id="overlay" >
+			<div class="popup" id="popup">
+				<a href="#" id="btn-cerrar-popup" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
+				<h3>Agregar tarea</h3>
+				<form id="form-tareas">
+					<div class="contenedor-inputs">
+						<input type="text" id="titulo" placeholder="Titulo">
+						<textarea cols="30" rows="3" id="descripcion" placeholder="Descripción"></textarea>
+						<input type="date" id="fecha" placeholder="Fecha">
+					</div>
+					<input type="submit" class="btn-submit" value="Agregar" id="submit">
+				</form>
+			</div>
+		</div>
+		<div id="tareas"></div>
+	</div>
+
+	<script src="popup.js"></script>
+	<script src="code.js"></script>
+</body>
+</html>
